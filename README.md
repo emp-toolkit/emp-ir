@@ -154,15 +154,10 @@ For any question, please contact the developers Kimberlee I. Model and Xiao Wang
 
 ## Licensing and Acknowledgements
 
-**In effect until DARPA PRC Review**
-FOR SIEVE PROGRAM ONLY! Performers on the SIEVE program may use this code for its intended purpose ONLY for the SIEVE Program.
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+This work is open source licensed using the [MIT License](./LICENSE).
 
-**In effect when approved by DARPA PRC and released by performer**
-This work is open source licensed using the MIT License.
+**Distribution Statement A:** Approved for Public Release, Distribution Unlimited.
 
-**Distribution Statement (To be determined)**
-
-This material is based upon work supported by DARPA under Contract No. HR001120C0087.  Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of DARPA. Distribution Statement “A” (Approved for Public Release, Distribution Unlimited)
+This material is based upon work supported by DARPA under Contract No. HR001120C0087.  Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of DARPA.
 
 Matrix multiplication examples were generated using [wiztoolkit](https://github.com/stealthsoftwareinc/wiztoolkit/blob/master/src/main/python/matrix_prod.py)
