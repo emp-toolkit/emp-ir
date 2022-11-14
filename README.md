@@ -33,7 +33,7 @@ For example a relation could be compiled like this.
 
 ```bash
 # setup the flags
-FLAGS="-lstealth_logging -lwiztoolkit -lemp-tool -lemp-zk -lcrypto -pthread -std=c++11 -march=native -Wall -funroll-loops -O3
+FLAGS="-lstealth_logging -lwiztoolkit -lemp-tool -lemp-zk -lcrypto -pthread -std=c++11 -march=native -Wall -funroll-loops -O3"
 
 # Compile the prover
 emp-compile ir_source.rel prover > prover.cpp
