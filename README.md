@@ -163,6 +163,6 @@ This work is open source licensed using the MIT License.
 
 **Distribution Statement (To be determined)**
 
-This material is based upon work supported by DARPA under Contract No. HR001120C0087.  Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of DARPA.
+This material is based upon work supported by DARPA under Contract No. HR001120C0087.  Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of DARPA. Distribution Statement “A” (Approved for Public Release, Distribution Unlimited)
 
 Matrix multiplication examples were generated using [wiztoolkit](https://github.mit.edu/sieve-all/wiztoolkit/blob/master/src/main/python/matrix_prod.py)
