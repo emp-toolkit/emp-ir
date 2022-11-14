@@ -1,0 +1,79 @@
+version 1.0.0;
+field characteristic 2305843009213693951 degree 1;
+relation
+gate_set:arithmetic;
+features:@for,@function;
+@begin
+
+@function(sum, @out: 1, @in: 1000, @instance: 0, @short_witness: 0)
+  // out: $0
+  // in: $1 ... $1000
+  $1001 <- @add($1, $2);
+  $1002 ... $1998 <- @for i @first 2 @last 998
+    $(i + 1000) <- @anon_call($(1 + i), $(999 + i), @instance: 0, @short_witness: 0)
+      $0 <- @add($1, $2);
+    @end
+  @end
+  $0 <- @add($1000, $1998);
+@end
+
+// M (1000x1000): $0...$999999 (instance)
+// N (1000x1000): $2000000...$2999999 (witness)
+// C (1000x1000): $1000000...$1999999 (instance)
+// C' (1000x1000): $3000000...$3999999
+
+// Computes the product C':=M*N, and checks that C'==C
+
+$0 ... $999999 <- @for i @first 0 @last 999999
+  $i <- @anon_call(@instance: 1, @short_witness: 0)
+    $0 <- @instance;
+  @end
+@end
+$1000000 ... $1999999 <- @for i @first 1000000 @last 1999999
+  $i <- @anon_call(@instance: 1, @short_witness: 0)
+    $0 <- @instance;
+  @end
+@end
+$2000000 ... $2999999 <- @for i @first 2000000 @last 2999999
+  $i <- @anon_call(@instance: 0, @short_witness: 1)
+    $0 <- @short_witness;
+  @end
+@end
+
+$3000000 ... $3999999 <- @for i @first  0 @last 999
+  $(3000000 + (i * 1000)) ... $(3000999 + (i * 1000)) <- @anon_call($0 ... $999999, $2000000 ... $2999999, @instance: 0, @short_witness: 0)
+    // C'[i][...]: $0 ... $999
+    // M: $1000 ... $1000999
+    // N: $1001000 ... $2000999
+    $0 ... $999 <- @for j @first 0 @last 999
+      $j <- @anon_call($1000 ... $1000999, $1001000... $2000999, @instance: 0, @short_witness: 0)
+        // C'[i][j]: $0
+        // M: $1 ... $1000000
+        // N: $1000001 ... $2000000
+        $2000001 ... $2001000 <- @for k @first 0 @last 999
+          $(k + 2000001) <- @anon_call($(1 + ((i * 1000) + k)), $(1000001 + ((k * 1000) + j)), @instance: 0,@short_witness: 0)
+            $0 <- @mul($1, $2);
+          @end
+        @end
+        $0 <- @call(sum, $2000001 ... $2001000);
+      @end
+    @end
+  @end
+@end
+
+// Check that C' == C
+@for i @first 0 @last 999
+  @anon_call($((i * 1000) + 1000000) ...$((i * 1000) + 1000999), $((i * 1000) + 3000000) ... $((i * 1000) + 3000999), @instance: 0, @short_witness: 0)
+    // C[i][...]: $0 ... $999
+    // C'[i][...]: $1000 ... $1999
+    @for j @first 0 @last 999
+      @anon_call($j, $(j + 1000), @instance: 0, @short_witness: 0)
+        $2 <- @mulc($0, < 2305843009213693950 >);
+        $3 <- @add($1, $2);
+        @assert_zero($3);
+      @end
+    @end
+  @end
+@end
+
+@end

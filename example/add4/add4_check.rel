@@ -1,0 +1,20 @@
+version 1.0.0;
+field characteristic 2 degree 1;
+relation
+gate_set: boolean;
+features: @function;
+@begin
+  @function(add_4, @out: 0, @in: 4, @instance: 0, @short_witness: 0)
+    $4 <- @xor($0, $1);
+    $5 <- @xor($2, $3);
+    $6 <- @xor($4, $5);
+    @assert_zero($6);
+  @end
+
+  $0 <- @short_witness;
+  $1 <- @instance;
+  $2 <- @short_witness;
+  $3 <- @instance;
+  @call(add_4, $0...$3);
+@end
+

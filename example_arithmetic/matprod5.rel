@@ -1,0 +1,79 @@
+version 1.0.0;
+field characteristic 2305843009213693951 degree 1;
+relation
+gate_set:arithmetic;
+features:@for,@function;
+@begin
+
+@function(sum, @out: 1, @in: 5, @instance: 0, @short_witness: 0)
+  // out: $0
+  // in: $1 ... $5
+  $6 <- @add($1, $2);
+  $7 ... $8 <- @for i @first 2 @last 3
+    $(i + 5) <- @anon_call($(1 + i), $(4 + i), @instance: 0, @short_witness: 0)
+      $0 <- @add($1, $2);
+    @end
+  @end
+  $0 <- @add($5, $8);
+@end
+
+// M (5x5): $0...$24 (instance)
+// N (5x5): $50...$74 (witness)
+// C (5x5): $25...$49 (instance)
+// C' (5x5): $75...$99
+
+// Computes the product C':=M*N, and checks that C'==C
+
+$0 ... $24 <- @for i @first 0 @last 24
+  $i <- @anon_call(@instance: 1, @short_witness: 0)
+    $0 <- @instance;
+  @end
+@end
+$25 ... $49 <- @for i @first 25 @last 49
+  $i <- @anon_call(@instance: 1, @short_witness: 0)
+    $0 <- @instance;
+  @end
+@end
+$50 ... $74 <- @for i @first 50 @last 74
+  $i <- @anon_call(@instance: 0, @short_witness: 1)
+    $0 <- @short_witness;
+  @end
+@end
+
+$75 ... $99 <- @for i @first  0 @last 4
+  $(75 + (i * 5)) ... $(79 + (i * 5)) <- @anon_call($0 ... $24, $50 ... $74, @instance: 0, @short_witness: 0)
+    // C'[i][...]: $0 ... $4
+    // M: $5 ... $29
+    // N: $30 ... $54
+    $0 ... $4 <- @for j @first 0 @last 4
+      $j <- @anon_call($5 ... $29, $30... $54, @instance: 0, @short_witness: 0)
+        // C'[i][j]: $0
+        // M: $1 ... $25
+        // N: $26 ... $50
+        $51 ... $55 <- @for k @first 0 @last 4
+          $(k + 51) <- @anon_call($(1 + ((i * 5) + k)), $(26 + ((k * 5) + j)), @instance: 0,@short_witness: 0)
+            $0 <- @mul($1, $2);
+          @end
+        @end
+        $0 <- @call(sum, $51 ... $55);
+      @end
+    @end
+  @end
+@end
+
+// Check that C' == C
+@for i @first 0 @last 4
+  @anon_call($((i * 5) + 25) ...$((i * 5) + 29), $((i * 5) + 75) ... $((i * 5) + 79), @instance: 0, @short_witness: 0)
+    // C[i][...]: $0 ... $4
+    // C'[i][...]: $5 ... $9
+    @for j @first 0 @last 4
+      @anon_call($j, $(j + 5), @instance: 0, @short_witness: 0)
+        $2 <- @mulc($0, < 2305843009213693950 >);
+        $3 <- @add($1, $2);
+        @assert_zero($3);
+      @end
+    @end
+  @end
+@end
+
+@end

@@ -1,0 +1,27 @@
+version 1.0.0;
+field characteristic 2 degree 1;
+relation
+gate_set: boolean;
+features: @function, @switch;
+@begin
+  $0 <- @short_witness;
+  $1 <- @switch($0)
+    @case < 0 >: @anon_call(@instance: 1, @short_witness: 2)
+    $1 <- @short_witness;
+    $2 <- @instance;
+    $3 <- @short_witness;
+    $4 <- @xor($1, $2);
+    $0 <- @xor($3, $4);
+  @end
+    @case < 1 >: @anon_call(@instance: 2, @short_witness: 1)
+    $1 <- @instance;
+    $2 <- @short_witness;
+    $3 <- @instance;
+    $4 <- @and($1, $2);
+    $0 <- @and($3, $4);
+  @end
+  @end
+  $2 <- @instance;
+  $3 <- @xor($0, $2);
+  @assert_zero($3);
+@end

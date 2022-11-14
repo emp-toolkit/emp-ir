@@ -1,0 +1,30 @@
+// use examples/empty.ins and examples/empty.wit
+
+version 1.0.0;
+field characteristic 2 degree 1;
+relation
+gate_set: boolean;
+features: @for, @switch;
+
+@begin
+
+$0 <- @short_witness;
+$1 <- @instance;
+$2 <- <1>;
+
+$3...$10 <- @for i @first 3 @last 10
+  $i <- @anon_call($0 ... $(i-1), @instance: 0, @short_witness: 0)
+    $11 <- @xor($1, $2);
+    $0 <- @switch($11)
+      @case <0>: @anon_call($1, $3, $11, @instance: 0, @short_witness: 0)
+         $0 <- @xor ($1, $3);
+       @end
+      @case <1>: @anon_call($1, $3, $11, @instance: 0, @short_witness: 0)
+         $0 <- @and ($1, $2);
+       @end
+    @end
+  @end
+@end
+
+@end
+
